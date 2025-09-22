@@ -25,6 +25,7 @@ export default function Home() {
   const [movieData, setMovieData] = useState([]);
   const [tvData, setTvData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState({});
 
   const fetchInitialData = async () => {
     setLoading(true);
@@ -40,37 +41,47 @@ export default function Home() {
       Promise.all(initialTvPromises)
     ]);
 
-    setMovieData(movieResults.map(results => results.slice(0, 6)));
-    setTvData(tvResults.map(results => results.slice(0, 6)));
+    setMovieData(movieResults.map(results => results.slice(0, 10)));
+    setTvData(tvResults.map(results => results.slice(0, 10)));
     setLoading(false);
   };
 
   const loadMoreMovies = async (categoryKey, categoryIndex) => {
-    setLoading(true);
-    const currentPage = movieData[categoryIndex].length / 6;
-    const newPage = currentPage + 1;
-    const moreMovies = await getMoviesByCategory(categoryKey, newPage);
-    
-    setMovieData(prevData => {
-      const newData = [...prevData];
-      newData[categoryIndex] = [...newData[categoryIndex], ...moreMovies.slice(0, 6)];
-      return newData;
-    });
-    setLoading(false);
+    setLoadingMore(prev => ({ ...prev, [`movie-${categoryIndex}`]: true }));
+    try {
+      const currentPage = Math.ceil(movieData[categoryIndex].length / 10);
+      const newPage = currentPage + 1;
+      const moreMovies = await getMoviesByCategory(categoryKey, newPage);
+      
+      setMovieData(prevData => {
+        const newData = [...prevData];
+        newData[categoryIndex] = [...newData[categoryIndex], ...moreMovies.slice(0, 10)];
+        return newData;
+      });
+    } catch (error) {
+      console.error('Error loading more movies:', error);
+    } finally {
+      setLoadingMore(prev => ({ ...prev, [`movie-${categoryIndex}`]: false }));
+    }
   };
 
   const loadMoreTv = async (categoryKey, categoryIndex) => {
-    setLoading(true);
-    const currentPage = tvData[categoryIndex].length / 6;
-    const newPage = currentPage + 1;
-    const moreTv = await getTvSeriesByCategory(categoryKey, newPage);
-    
-    setTvData(prevData => {
-      const newData = [...prevData];
-      newData[categoryIndex] = [...newData[categoryIndex], ...moreTv.slice(0, 6)];
-      return newData;
-    });
-    setLoading(false);
+    setLoadingMore(prev => ({ ...prev, [`tv-${categoryIndex}`]: true }));
+    try {
+      const currentPage = Math.ceil(tvData[categoryIndex].length / 10);
+      const newPage = currentPage + 1;
+      const moreTv = await getTvSeriesByCategory(categoryKey, newPage);
+      
+      setTvData(prevData => {
+        const newData = [...prevData];
+        newData[categoryIndex] = [...newData[categoryIndex], ...moreTv.slice(0, 10)];
+        return newData;
+      });
+    } catch (error) {
+      console.error('Error loading more TV series:', error);
+    } finally {
+      setLoadingMore(prev => ({ ...prev, [`tv-${categoryIndex}`]: false }));
+    }
   };
 
   useEffect(() => {
@@ -79,7 +90,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-8 bg-slate-900 text-white">
-      <h1 className="text-5xl md:text-6xl font-extrabold text-center text-orange-400 mb-4 drop-shadow-lg">
+      <h1 className="text-5xl md:text-6xl font-extrabold text-center text-blue-400 mb-4 drop-shadow-lg">
         Himovies
       </h1>
       <p className="text-xl md:text-2xl text-center text-gray-300 mb-12">
@@ -100,9 +111,10 @@ export default function Home() {
               <div className="text-center mt-6">
                 <button
                   onClick={() => loadMoreMovies(category.key, index)}
-                  className="px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-white bg-blue-600 hover:bg-blue-700"
+                  disabled={loadingMore[`movie-${index}`]}
+                  className="px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-white bg-blue-600 hover:bg-red-700 disabled:opacity-50"
                 >
-                  Load More
+                  {loadingMore[`movie-${index}`] ? 'Loading...' : 'Load More'}
                 </button>
               </div>
             </div>
@@ -120,9 +132,10 @@ export default function Home() {
               <div className="text-center mt-6">
                 <button
                   onClick={() => loadMoreTv(category.key, index)}
-                  className="px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-white bg-blue-600 hover:bg-blue-700"
+                  disabled={loadingMore[`tv-${index}`]}
+                  className="px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-white bg-red-600 hover:bg-blue-700 disabled:opacity-50"
                 >
-                  Load More
+                  {loadingMore[`tv-${index}`] ? 'Loading...' : 'Load More'}
                 </button>
               </div>
             </div>

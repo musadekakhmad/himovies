@@ -23,7 +23,7 @@ const createSlug = (item) => {
   return `${baseSlug}-${year}`;
 };
 
-// Fungsi generateMetadata untuk SEO dan OG tags
+// Generate metadata function for SEO and OG tags
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   
@@ -57,18 +57,17 @@ export async function generateMetadata({ params }) {
 
   if (!tvShowData) {
     return {
-      title: 'Halaman Tidak Ditemukan',
-      description: 'Halaman serial TV yang Anda cari tidak ditemukan.'
+      title: 'Page Not Found',
+      description: 'The TV series page you are looking for could not be found.'
     };
   }
 
-  const tvShowTitle = tvShowData.name || 'Serial TV Tanpa Judul';
-  const tvShowDescription = tvShowData.overview || 'Sinopsis tidak tersedia.';
+  const tvShowTitle = tvShowData.name || 'Untitled TV Series';
+  const tvShowDescription = tvShowData.overview || 'Synopsis not available.';
   
-  // LOGIKA BARU: Pertama, coba gunakan backdrop_path (16:9), lalu kembali ke poster_path jika tidak tersedia.
   const tvShowImageUrl = tvShowData.backdrop_path ? `https://image.tmdb.org/t/p/w1280${tvShowData.backdrop_path}` : tvShowData.poster_path ? `https://image.tmdb.org/t/p/w1280${tvShowData.poster_path}` : '';
   
-  const tvShowUrl = `https://himovies-us.netlify.app/tv-show/${slug}`;
+  const tvShowUrl = `https://himovies-us.netlify.app/tv-series/${slug}`;
 
   return {
     title: `${tvShowTitle} | Himovies`,
@@ -93,10 +92,10 @@ export async function generateMetadata({ params }) {
 }
 
 
-export default async function TvShowPage({ params }) {
+export default async function TvSeriesPage({ params }) {
   const { slug } = await params;
 
-  let tvShowData = null;
+  let tvSeriesData = null;
   const id = parseInt(slug, 10);
 
   // Separate the slug into title and year, if a year exists
@@ -107,12 +106,12 @@ export default async function TvShowPage({ params }) {
 
   // Check if the slug is a numeric ID
   if (!isNaN(id) && slugParts.length === 1) {
-    tvShowData = await getTvSeriesById(id);
+    tvSeriesData = await getTvSeriesById(id);
   } else {
     // Search for the TV series based on the title part of the slug
     const searchResults = await searchMoviesAndTv(slugTitle.replace(/-/g, ' '));
     
-    let matchingTvShow = searchResults.find(item => {
+    let matchingTvSeries = searchResults.find(item => {
       const itemTitle = item.name?.toLowerCase().replace(/[^a-z0-9\s]/g, '');
       if (!itemTitle) {
         return false;
@@ -128,30 +127,30 @@ export default async function TvShowPage({ params }) {
       return item.media_type === 'tv' && titleMatch && yearMatch;
     });
 
-    if (matchingTvShow) {
-      tvShowData = await getTvSeriesById(matchingTvShow.id);
+    if (matchingTvSeries) {
+      tvSeriesData = await getTvSeriesById(matchingTvSeries.id);
     }
   }
 
-  if (!tvShowData) {
+  if (!tvSeriesData) {
     notFound();
   }
 
-  const [videos, credits, reviews, similarTvShows] = await Promise.all([
-    getTvSeriesVideos(tvShowData.id),
-    getTvSeriesCredits(tvShowData.id),
-    getTvSeriesReviews(tvShowData.id),
-    getSimilarTvSeries(tvShowData.id),
+  const [videos, credits, reviews, similarTvSeries] = await Promise.all([
+    getTvSeriesVideos(tvSeriesData.id),
+    getTvSeriesCredits(tvSeriesData.id),
+    getTvSeriesReviews(tvSeriesData.id),
+    getSimilarTvSeries(tvSeriesData.id),
   ]);
 
-  const backdropUrl = tvShowData.backdrop_path ? `https://image.tmdb.org/t/p/original${tvShowData.backdrop_path}` : tvShowData.poster_path ? `https://image.tmdb.org/t/p/original${tvShowData.poster_path}` : null;
-  const posterUrl = tvShowData.poster_path ? `https://image.tmdb.org/t/p/w500${tvShowData.poster_path}` : null;
+  const backdropUrl = tvSeriesData.backdrop_path ? `https://image.tmdb.org/t/p/original${tvSeriesData.backdrop_path}` : tvSeriesData.poster_path ? `https://image.tmdb.org/t/p/original${tvSeriesData.poster_path}` : null;
+  const posterUrl = tvSeriesData.poster_path ? `https://image.tmdb.org/t/p/w500${tvSeriesData.poster_path}` : null;
 
   const trailer = videos && videos.length > 0 ? videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer') : null;
   const cast = credits.cast.slice(0, 10);
   const crew = credits.crew.filter(member => ['Director', 'Writer', 'Screenplay'].includes(member.job)).slice(0, 5);
   const userReviews = reviews ? reviews.slice(0, 5) : [];
-  const seasons = tvShowData.seasons;
+  const seasons = tvSeriesData.seasons;
 
   return (
     <div className="min-h-screen bg-slate-900 text-white pb-8">
@@ -160,7 +159,7 @@ export default async function TvShowPage({ params }) {
         <div className="relative h-64 sm:h-96 md:h-[500px] overflow-hidden">
           <Image
             src={backdropUrl}
-            alt={`${tvShowData.name} backdrop`}
+            alt={`${tvSeriesData.name} backdrop`}
             fill
             style={{ objectFit: 'cover' }}
             className="w-full h-full object-cover rounded-lg shadow-xl"
@@ -176,7 +175,7 @@ export default async function TvShowPage({ params }) {
           <div className="w-full md:w-1/3 flex-shrink-0 mb-6 md:mb-0">
             <Image
               src={posterUrl || `https://placehold.co/500x750/1f2937/d1d5db?text=Poster+Not+Available`}
-              alt={tvShowData.name}
+              alt={tvSeriesData.name}
               width={500}
               height={750}
               className="w-full h-auto rounded-lg shadow-xl"
@@ -188,46 +187,46 @@ export default async function TvShowPage({ params }) {
           {/* Details Section */}
           <div className="flex-1">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-400 mb-2">
-              {tvShowData.name}
+              {tvSeriesData.name}
             </h1>
             <p className="text-gray-300 text-lg sm:text-xl mb-4 italic">
-              {tvShowData.tagline}
+              {tvSeriesData.tagline}
             </p>
             <div className="flex items-center space-x-4 mb-4">
               <span className="flex items-center bg-blue-600 rounded-full px-3 py-1 text-sm font-semibold text-white">
                 <FaStar className="text-yellow-400 mr-1" />
-                {tvShowData.vote_average.toFixed(1)} / 10
+                {tvSeriesData.vote_average.toFixed(1)} / 10
               </span>
               <span className="text-gray-400 text-sm">
-                {tvShowData.number_of_seasons} seasons
+                {tvSeriesData.number_of_seasons} seasons
               </span>
               <span className="text-gray-400 text-sm">
-                {tvShowData.first_air_date?.substring(0, 4)}
+                {tvSeriesData.first_air_date?.substring(0, 4)}
               </span>
             </div>
 
             <h2 className="text-2xl font-bold mt-6 mb-2">Synopsis</h2>
             <p className="text-gray-300 text-justify mb-6">
-              {tvShowData.overview || 'Synopsis not available.'}
+              {tvSeriesData.overview || 'Synopsis not available.'}
             </p>
 
             <div className="grid grid-cols-2 gap-4 text-sm text-gray-400 mb-6">
               <div>
                 <p>
                   <strong>Genre:</strong>{' '}
-                  {tvShowData.genres?.map((genre) => genre.name).join(', ')}
+                  {tvSeriesData.genres?.map((genre) => genre.name).join(', ')}
                 </p>
                 <p>
-                  <strong>Status:</strong> {tvShowData.status}
+                  <strong>Status:</strong> {tvSeriesData.status}
                 </p>
               </div>
               <div>
                 <p>
                   <strong>Created by:</strong>{' '}
-                  {tvShowData.created_by?.map((creator) => creator.name).join(', ') || 'N/A'}
+                  {tvSeriesData.created_by?.map((creator) => creator.name).join(', ') || 'N/A'}
                 </p>
                 <p>
-                  <strong>Website:</strong> <a href={tvShowData.homepage} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{tvShowData.homepage}</a>
+                  <strong>Website:</strong> <a href={tvSeriesData.homepage} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{tvSeriesData.homepage}</a>
                 </p>
               </div>
             </div>
@@ -359,18 +358,18 @@ export default async function TvShowPage({ params }) {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400">No reviews for this TV show yet.</p>
+            <p className="text-gray-400">No reviews for this TV series yet.</p>
           )}
         </div>
 
-        {/* Similar TV Shows Section */}
-        {similarTvShows && similarTvShows.results && similarTvShows.results.length > 0 && (
+        {/* Similar TV Series Section */}
+        {similarTvSeries && similarTvSeries.length > 0 && (
           <div className="mt-8 border-t border-gray-700 pt-8">
-            <h2 className="text-2xl font-bold mb-4 text-blue-400">Similar TV Shows</h2>
+            <h2 className="text-2xl font-bold mb-4 text-blue-400">Similar TV Series</h2>
             <div className="flex overflow-x-auto space-x-4 pb-4 no-scrollbar">
-              {similarTvShows.results.slice(0, 10).map(item => {
+              {similarTvSeries.slice(0, 10).map(item => {
                 const itemSlug = createSlug(item);
-                const itemUrl = `/tv-show/${itemSlug}`;
+                const itemUrl = `/tv-series/${itemSlug}`;
 
                 const getImageUrl = (path) => {
                   if (path) {
@@ -408,9 +407,9 @@ export default async function TvShowPage({ params }) {
           </div>
         )}
 		
-		{/* Tombol Streaming Bawah */}
+		{/* Bottom Stream Button */}
         <div className="mt-12 text-center">
-             <a href={`/tv-show/${slug}/stream`}>
+             <a href={`/tv-series/${slug}/stream`}>
               <button className="bg-blue-600 hover:bg-red-600 text-white font-bold py-4 px-10 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">
                 🎬 Stream Now
               </button>

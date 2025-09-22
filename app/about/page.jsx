@@ -1,124 +1,200 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
+import { FaHome, FaFilm, FaTv, FaSearch, FaStar, FaUsers, FaGlobe } from 'react-icons/fa';
 
 export default function About() {
   return (
-    <div className="container mx-auto px-4 py-8 text-gray-300">
-      <div className="bg-gray-800 p-8 rounded-xl shadow-lg">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-orange-400">
-          Himovies: Your Ultimate Destination for Movie and TV Series Information
-        </h1>
-        <div className="mb-8 flex justify-center">
-          <img
-            src="https://live.staticflickr.com/65535/54767992596_35dbf1a5c0_b.jpg"
-            alt="Film reels and movie tickets"
-            width={1024}
-            height={416}
-            className="rounded-xl shadow-md"
-          />
+    <div className="min-h-screen bg-slate-900 text-gray-300">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-orange-900/50 to-slate-900 py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-orange-400">
+            Himovies - Ultimate Movie & TV Series Database
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
+            Your comprehensive guide to movies, TV series, reviews, and streaming information. Discover, explore, and enjoy cinematic excellence.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <Link href="/" className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+              <FaHome /> Home
+            </Link>
+            <Link href="/movie/genre/action" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+              <FaFilm /> Browse Movies
+            </Link>
+            <Link href="/tv-series/genre/drama" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+              <FaTv /> Browse TV Series
+            </Link>
+          </div>
         </div>
-        <p className="text-center text-gray-400 mb-8">
-          Your Himovies is not just a website; it is a comprehensive portal designed for movie and TV series lovers.
-        </p>
+      </div>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-orange-300">
-            What is Your Himovies?
-          </h2>
-          <p className="mb-4 text-justify">
-            Your Himovies is a revolutionary platform that provides the most complete, accessible, and always up-to-date movie and TV series database. Established with the mission to provide accurate and in-depth information for entertainment connoisseurs, we offer more than just titles and posters. We are a trusted source for discovering the latest movies, popular TV series, honest user reviews, trailers, and much more. We believe that every film has a story behind it, and our job is to reveal it to you. With a user-friendly interface, smart search, and intuitive navigation, your experience in exploring the cinematic world will be more enjoyable and informative. We don't just focus on Hollywood blockbuster films but also embrace the diversity of cinema from all over the world, including independent films, documentaries, and films from various countries. Our goal is to create a community where everyone can share their love for films and discover new, inspiring works.
-          </p>
-          <p className="mb-4 text-justify">
-            We realize that in this digital era, information is often scattered across various platforms. Your Himovies is here as a centralized solution. You no longer need to jump from one site to another just to get complete information. From synopses, cast lists, crew, to ratings and reviews, we present everything in one place. Our platform is designed for all audiences, whether you are an experienced film critic, a casual viewer looking for a weekend recommendation, or a student conducting research.
-          </p>
-          <p className="text-justify">
-            Every detail you find on Your Himovies, from release dates to interesting trivia, has been carefully curated. We are committed to maintaining the quality and accuracy of information, making it a reliable source of reference. We also optimize our site for mobile devices, ensuring you can access our database anytime and anywhere, whether you are in a cafe, traveling, or relaxing at home. Your Himovies is your loyal companion on every cinematic journey.
-          </p>
-        </section>
+      <div className="container mx-auto px-4 py-12">
+        {/* Main Content */}
+        <div className="bg-gray-800/50 p-8 rounded-xl shadow-lg backdrop-blur-sm">
+          {/* Introduction */}
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <img
+                src="https://live.staticflickr.com/65535/54803471299_d3df3e14c1_b.jpg"
+                alt="Movie reels and cinema tickets - Ultimate movie database"
+                width={1024}
+                height={416}
+                className="rounded-xl shadow-2xl mx-auto mb-8"
+              />
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-orange-300">
+                Discover the World of Cinema with Himovies
+              </h2>
+              <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+                Himovies is Indonesia's Worldwide most complete movie and TV series information platform. 
+                We provide accurate data, user reviews, streaming guides, and everything you need about films and television shows.
+              </p>
+            </div>
+          </section>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-orange-300">
-            Our Top Features
-          </h2>
-          <ul className="list-disc list-inside space-y-4 pl-4">
-            <li className="text-justify">
-              **Comprehensive Movie Database:** Explore thousands of films from various decades and genres. Find popular, currently airing, upcoming, and top-rated films.
-            </li>
-            <li className="text-justify">
-              **In-depth TV Series Information:** We don't forget about TV series. Find popular, currently airing, on-air, and top-rated series.
-            </li>
-            <li className="text-justify">
-              **Smart and Efficient Search:** Search for your favorite movies, TV series, or even actors quickly and accurately. Our search system is designed to understand your intent and provide the most relevant results.
-            </li>
-            <li className="text-justify">
-              **User Reviews and Ratings:** Get real perspectives from other viewers through the reviews and ratings we display. This helps you make a better decision before watching.
-            </li>
-            <li className="text-justify">
-              **Trailers and Videos:** Watch trailers and movie clips directly on the detail page, giving you a glimpse of the film before you decide to watch.
-            </li>
-          </ul>
-        </section>
+          {/* Features Grid */}
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold mb-12 text-center text-orange-300">
+              Why Choose Himovies?
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-gray-700/50 p-6 rounded-xl text-center">
+                <FaFilm className="text-4xl text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">10,000+ Movies</h3>
+                <p className="text-gray-400">Comprehensive database from classic to latest releases</p>
+              </div>
+              <div className="bg-gray-700/50 p-6 rounded-xl text-center">
+                <FaTv className="text-4xl text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">5,000+ TV Series</h3>
+                <p className="text-gray-400">Complete TV show information with seasons and episodes</p>
+              </div>
+              <div className="bg-gray-700/50 p-6 rounded-xl text-center">
+                <FaSearch className="text-4xl text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">Smart Search</h3>
+                <p className="text-gray-400">Find movies, actors, and directors with advanced search</p>
+              </div>
+              <div className="bg-gray-700/50 p-6 rounded-xl text-center">
+                <FaStar className="text-4xl text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">User Reviews</h3>
+                <p className="text-gray-400">Real ratings and reviews from our community</p>
+              </div>
+              <div className="bg-gray-700/50 p-6 rounded-xl text-center">
+                <FaUsers className="text-4xl text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">Community Driven</h3>
+                <p className="text-gray-400">Join thousands of movie enthusiasts sharing their passion</p>
+              </div>
+              <div className="bg-gray-700/50 p-6 rounded-xl text-center">
+                <FaGlobe className="text-4xl text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">Global Content</h3>
+                <p className="text-gray-400">Movies and TV series from around the world</p>
+              </div>
+            </div>
+          </section>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-orange-300">
-            Our Mission and Vision
-          </h2>
-          <p className="mb-4 text-justify">
-            Our mission is to be the most trusted and easily accessible source of film and TV series information in Indonesia. We want to be a bridge between cinematic art and the audience, facilitating the discovery and appreciation of various forms of visual entertainment. Our vision is to create a digital ecosystem where information is not only available but also presented in a way that inspires, attracts, and enriches every individual's viewing experience. We aspire to build a solid and passionate community, where the exchange of ideas and film recommendations is common and enjoyable.
-          </p>
-          <p className="text-justify">
-            We are committed to continuously innovating and adding new features that are relevant to user needs. We listen to feedback from our community and actively implement suggestions to improve this platform. This is a project that continues to evolve, and every update, whether small or large, is dedicated to you, our valuable users. We believe that with collaboration and the same spirit, we can make Your Himovies the number one site for all things related to movies and TV series.
-          </p>
-        </section>
+          {/* Detailed Sections */}
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold mb-6 text-orange-300">
+              Complete Movie Database Indonesia
+            </h2>
+            <div className="space-y-6 text-justify">
+              <p>
+                <strong>Himovies</strong> is your ultimate destination for <strong>movie information Indonesia</strong> and 
+                <strong> TV series database</strong>. We provide the most accurate and up-to-date information about 
+                <strong> latest movies</strong>, <strong>popular TV shows</strong>, <strong>movie reviews</strong>, and 
+                <strong> streaming guides</strong>. Our platform is designed for both casual viewers and hardcore cinephiles.
+              </p>
+              <p>
+                As the <strong>best movie website Indonesia</strong>, we offer comprehensive details including cast and crew information, 
+                plot summaries, ratings, trailers, and where to watch. Whether you're looking for 
+                <strong> Hollywood blockbusters</strong>, <strong>independent films</strong>, or <strong>international cinema</strong>, 
+                Himovies has you covered.
+              </p>
+            </div>
+          </section>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-orange-300">
-            How Your Himovies is Different
-          </h2>
-          <p className="mb-4 text-justify">
-            Amidst the sea of Himoviess, Your Himovies stands out for several reasons. First, we prioritize the user experience. Our interface is designed to be minimalist and clean, free from annoying pop-up ads and unnecessary elements. We want you to focus on what matters most: movies and TV series.
-          </p>
-          <p className="mb-4 text-justify">
-            Second, we are a reliable source of information because we get data directly from The Movie Database (TMDb), one of the largest and most prominent film databases in the world. This ensures that all the information you see, from the cast list to the release date, is the most accurate and up-to-date. TMDb is a global community that constantly verifies and updates data, and we are proud to be able to present this high-quality data to you.
-          </p>
-          <p className="mb-4 text-justify">
-            Third, we not only present movies but also TV series. This makes Your Himovies a one-stop-shop for all your visual entertainment needs. You don't have to switch to other platforms to get information about your favorite TV shows. Everything is here, under one roof.
-          </p>
-          <p className="text-justify">
-            Lastly, we are a community-focused platform. We encourage users to interact, share reviews, and recommend films to their friends. We believe that the viewing experience is richer when shared with others. We are a place where you not only find movies but also find friends with similar interests.
-          </p>
-        </section>
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold mb-6 text-orange-300">
+              Streaming Guide & Watch Recommendations
+            </h2>
+            <div className="space-y-6 text-justify">
+              <p>
+                Find <strong>where to watch movies online</strong> and <strong>TV series streaming platforms</strong> with our comprehensive 
+                streaming guide. We help you discover <strong>best movies to watch</strong> and 
+                <strong> top-rated TV shows</strong> based on your preferences.
+              </p>
+              <p>
+                Our platform includes <strong>movie recommendations</strong>, <strong>genre exploration</strong>, and 
+                <strong> personalized suggestions</strong> to enhance your viewing experience. From 
+                <strong> action movies</strong> to <strong>drama series</strong>, from <strong>comedy films</strong> to 
+                <strong> thriller TV shows</strong> - we've got all genres covered.
+              </p>
+            </div>
+          </section>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-orange-300">
-            SEO and Optimization for the Best Experience
-          </h2>
-          <p className="mb-4 text-justify">
-            We are very serious about SEO (Search Engine Optimization) to ensure Your Himovies is easily found by anyone looking for movie and TV series information on the internet. This content is designed to cover relevant keywords such as "watch movies online," "movie streaming," "most complete movie database," "latest movie reviews," "movie genres," and "Indonesian movie information." The goal is that when someone types these keywords into Google or other search engines, Your Himovies appears in the top results.
-          </p>
-          <p className="mb-4 text-justify">
-            We also optimize our website speed. With lightweight and efficient code, our pages load quickly, providing a smooth user experience. Site speed is an important factor in SEO, and we are committed to maintaining optimal performance.
-          </p>
-          <p className="mb-4 text-justify">
-            In addition, we ensure that all our content is accessible from various devices, whether it's a desktop, tablet, or mobile phone. With a responsive design, Your Himovies will look and function perfectly on any screen. This is important because most internet users today access content via mobile devices.
-          </p>
-          <p className="text-justify">
-            We also use a clean and descriptive URL structure, which is not only readable by humans but also friendly to search engines. Each movie and TV series page has a URL that reflects its title, helping search engines understand the page content. We also regularly monitor our SEO performance and make necessary adjustments to ensure our site remains competitive in the digital market. 
-          </p>
-        </section>
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold mb-6 text-orange-300">
+              SEO Optimized Movie Content
+            </h2>
+            <div className="space-y-6 text-justify">
+              <p>
+                Himovies is optimized for search engines to ensure you can easily find information about 
+                <strong> watch movies online free</strong>, <strong>latest movie releases 2024</strong>, 
+                <strong> best TV series to binge-watch</strong>, and <strong>movie streaming sites</strong>.
+              </p>
+              <p>
+                We cover all major keywords including <strong>"movie database"</strong>, <strong>"TV series information"</strong>, 
+                <strong>"film reviews"</strong>, <strong>"where to watch movies"</strong>, <strong>"movie genres"</strong>, 
+                and <strong>"entertainment guide Indonesia"</strong>.
+              </p>
+            </div>
+          </section>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-orange-300">
-            Join Us
-          </h2>
-          <p className="mb-4 text-justify">
-            Your Himovies is a project born from a love for movies and TV series. We invite you to explore our site, discover new titles, and share your experiences. This site is a testament to our dedication to providing a platform that is not only informative but also inspiring and entertaining. We will continue to work hard to bring the best content and the most advanced features to you.
-          </p>
-          <p className="text-justify">
-            So, what are you waiting for? Start your cinematic adventure now! Explore our vast movie collection, find your next favorite TV series, and enjoy an unrivaled browsing experience. We are confident you will find something new to love on Your Himovies. Thank you for choosing us as your movie information source. We are proud to serve you.
-          </p>
-        </section>
+          {/* Call to Action */}
+          <section className="text-center py-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-orange-300">
+              Start Your Cinematic Journey Today!
+            </h2>
+            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+              Join thousands of movie lovers who trust Himovies for their entertainment needs. 
+              Discover, explore, and enjoy the world of cinema like never before.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link href="/" className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors flex items-center gap-3">
+                <FaHome className="text-xl" /> Go to Homepage
+              </Link>
+              <Link href="/movie/genre/action" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors flex items-center gap-3">
+                <FaFilm className="text-xl" /> Explore Movies
+              </Link>
+              <Link href="/tv-series/genre/drama" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors flex items-center gap-3">
+                <FaTv className="text-xl" /> Browse TV Series
+              </Link>
+            </div>
+          </section>
+
+          {/* Quick Stats */}
+          <section className="bg-orange-900/30 rounded-xl p-8 text-center mb-12">
+            <h3 className="text-2xl font-bold mb-6 text-orange-300">Himovies by Numbers</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <div className="text-3xl font-bold text-orange-400">10,000+</div>
+                <div className="text-gray-400">Movies</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-orange-400">5,000+</div>
+                <div className="text-gray-400">TV Series</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-orange-400">50,000+</div>
+                <div className="text-gray-400">Users</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-orange-400">100,000+</div>
+                <div className="text-gray-400">Reviews</div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,23 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /*?*
+Crawl-delay: 1
 
 Sitemap: https://himovies-us.netlify.app/sitemap.xml
+
+# Googlebot specific directives
+User-agent: Googlebot
+Allow: /movie/
+Allow: /tv-series/
+Allow: /search/
+Crawl-delay: 2
+
+# Bingbot specific directives
+User-agent: bingbot
+Allow: /movie/
+Allow: /tv-series/
+Allow: /search/
+Crawl-delay: 2

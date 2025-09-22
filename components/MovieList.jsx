@@ -33,7 +33,9 @@ export default function MovieList({ movies }) {
         const itemSlug = createSlug(item);
         const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
         const altText = `Poster untuk ${mediaType === 'tv' ? 'serial TV' : 'film'} ${item.title || item.name}`;
-        const href = `/${mediaType === 'tv' ? 'tv-show' : 'movie'}/${itemSlug}`;
+        
+        // PERBAIKAN DI SINI: tv-show -> tv-series
+        const href = `/${mediaType === 'tv' ? 'tv-series' : 'movie'}/${itemSlug}`;
 
         // Tambahkan pemeriksaan keamanan untuk vote_average
         const voteAverage = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';

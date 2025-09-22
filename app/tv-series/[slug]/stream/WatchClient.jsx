@@ -2,34 +2,30 @@
 
 import { useState } from 'react';
 import { PlayCircleIcon } from 'lucide-react';
-import { notFound } from 'next/navigation';
 
 // ===================================
 // UTILITY FUNCTIONS
 // ===================================
 
-// Component to display a movie/TV series card
+// Komponen untuk menampilkan kartu film/serial TV
 function MediaCard({ media, mediaType }) {
     if (!media) {
         return null;
     }
 
     const POSTER_IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
-    // Use the mediaType passed from the parent component, or use the type from the media object
     const cardMediaType = mediaType || media.media_type;
     const mediaTitle = media.title || media.name;
     
-    // Get the release year
-    const releaseYear = media.release_date ? media.release_date.substring(0, 4) : 'N/A';
+    // Mendapatkan tahun rilis
+    const releaseYear = media.release_date ? media.release_date.substring(0, 4) : 
+                       media.first_air_date ? media.first_air_date.substring(0, 4) : 'N/A';
 
     const posterPath = media.poster_path && media.poster_path !== ""
         ? `${POSTER_IMAGE_URL}${media.poster_path}`
         : 'https://placehold.co/500x750?text=No+Image';
 
     const targetUrl = `/${cardMediaType}/${media.id}`;
-
-    // Check if the source is a placeholder URL
-    const isPlaceholder = posterPath.includes('placehold.co');
 
     return (
         <a href={targetUrl}>
@@ -51,32 +47,31 @@ function MediaCard({ media, mediaType }) {
 }
 
 // ===================================
-// CLIENT COMPONENT
+// CLIENT COMPONENT UNTUK TV SERIES
 // ===================================
-// This is a client component for interactive features
 export default function WatchClient({ mediaType, id, initialDetails, initialSimilarMedia }) {
     
-    // Handle the case where initialDetails is undefined, which can cause the TypeError
+    // Menangani kasus di mana initialDetails tidak terdefinisi
     if (!initialDetails) {
-        return <div>Error: Movie details not found.</div>;
+        return <div>Error: TV series details not found.</div>;
     }
 
     const [streamUrl, setStreamUrl] = useState('');
-    const [title, setTitle] = useState(initialDetails.title || initialDetails.name);
-    const [similarMedia, setSimilarMedia] = useState(initialSimilarMedia?.results || initialSimilarMedia || []);
-    const [page, setPage] = useState(2); // Start from page 2 since we already have page 1
+    const [title, setTitle] = useState(initialDetails.name || initialDetails.title);
+    const [similarMedia, setSimilarMedia] = useState(initialSimilarMedia || []);
+    const [page, setPage] = useState(2); // Mulai dari halaman 2 karena kita sudah punya halaman 1
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
-    // Function to fetch similar movies
-    const getSimilarMovies = async (page = 1) => {
-        const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY; 
-        const url = `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${API_KEY}&page=${page}`;
+    // Fungsi untuk mengambil data TV series serupa
+    const getSimilarTVSeries = async (page = 1) => {
+        const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+        const url = `https://api.themoviedb.org/3/tv/${id}/similar?api_key=${API_KEY}&page=${page}`;
         
         try {
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error('Failed to fetch similar movies data');
+                throw new Error('Failed to fetch similar TV series data');
             }
             const data = await response.json();
             return data;
@@ -86,15 +81,15 @@ export default function WatchClient({ mediaType, id, initialDetails, initialSimi
         }
     };
     
-    const loadMoreMovies = async () => {
+    const loadMoreTVSeries = async () => {
         setIsLoading(true);
-        const data = await getSimilarMovies(page);
+        const data = await getSimilarTVSeries(page);
         
         if (data.results && data.results.length > 0) {
-            setSimilarMedia(prevMovies => [...prevMovies, ...data.results]);
+            setSimilarMedia(prevTVSeries => [...prevTVSeries, ...data.results]);
             setPage(prevPage => prevPage + 1);
             
-            // Check if we've reached the last page
+            // Periksa apakah kita telah mencapai halaman terakhir
             if (page >= data.total_pages) {
                 setHasMore(false);
             }
@@ -124,7 +119,6 @@ export default function WatchClient({ mediaType, id, initialDetails, initialSimi
             <div className="container mx-auto px-4 py-8 relative z-10">
                 {/* Backdrop Section */}
                 <div className="absolute inset-0 z-0 overflow-hidden">
-                    {/* The backdrop will now always be seriesn if available, for both movies and TV seriess. */}
                     {initialDetails.backdrop_path && (
                         <img
                             src={`${BACKDROP_IMAGE_URL}${initialDetails.backdrop_path}`}
@@ -137,7 +131,7 @@ export default function WatchClient({ mediaType, id, initialDetails, initialSimi
 
                 {/* Main Content */}
                 <div className="relative z-10">
-                    {/* Movie/TV series Details Section */}
+                    {/* TV Series Details Section */}
                     <div className="flex flex-col md:flex-row items-start md:space-x-8 mb-8">
                         {/* Poster */}
                         {initialDetails.poster_path && (
@@ -149,7 +143,7 @@ export default function WatchClient({ mediaType, id, initialDetails, initialSimi
                                     height={750}
                                     className="w-full h-auto rounded-xl shadow-2xl"
                                 />
-                                {/* Streaming Buttons below the poster, not centered */}
+                                {/* Tombol Streaming */}
                                 <div className="mt-4">
                                     <h3 className="text-lg font-semibold mb-2">Select Stream Source</h3>
                                     <div className="flex space-x-4">
@@ -177,6 +171,17 @@ export default function WatchClient({ mediaType, id, initialDetails, initialSimi
                             <p className="text-sm md:text-base text-gray-300 mb-6">
                                 {initialDetails.overview || 'Synopsis not available.'}
                             </p>
+                            {/* Info tambahan untuk TV series */}
+                            {initialDetails.first_air_date && (
+                                <p className="text-sm text-gray-400 mb-2">
+                                    First Air Date: {initialDetails.first_air_date}
+                                </p>
+                            )}
+                            {initialDetails.number_of_seasons && (
+                                <p className="text-sm text-gray-400">
+                                    Seasons: {initialDetails.number_of_seasons}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -204,16 +209,16 @@ export default function WatchClient({ mediaType, id, initialDetails, initialSimi
                         <h2 className="text-2xl font-bold mb-6">You Might Also Like</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                             {similarMedia.map((media) => (
-                                <MediaCard key={media.id} media={media} mediaType="movie" />
+                                <MediaCard key={media.id} media={media} mediaType="tv" />
                             ))}
                         </div>
-                        {/* Load More Button */}
+                        {/* Tombol Muat Lebih Banyak */}
                         {hasMore && (
                             <div className="flex justify-center mt-8">
                                 <button
-                                    onClick={loadMoreMovies}
+                                    onClick={loadMoreTVSeries}
                                     disabled={isLoading}
-                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-green-700 transition-colors disabled:bg-gray-700 disabled:cursor-not-allowed"
+                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-red-700 transition-colors disabled:bg-gray-700 disabled:cursor-not-allowed"
                                 >
                                     {isLoading ? 'Loading...' : 'Load More'}
                                 </button>
