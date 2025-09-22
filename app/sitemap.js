@@ -1,4 +1,4 @@
-import { getAllMovies, getAllTVSeries } from '@/lib/tmdb';
+import { getAllMovies, getAllTVSeries } from '../lib/tmdb';
 
 const BASE_URL = 'https://himovies-us.netlify.app';
 
